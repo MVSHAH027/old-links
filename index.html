@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>જૈન જ્ઞાન સાગર | Jain Knowledge Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gujarati-font {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+        }
+        .active-lang {
+            background-color: #1D4ED8; /* Tailwind blue-700 */
+            color: white;
+        }
+        .inactive-lang {
+            background-color: #E5E7EB; /* Tailwind gray-200 */
+            color: #374151; /* Tailwind gray-700 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="mb-8 text-center">
+            <h1 id="pageTitle" class="text-3xl sm:text-4xl font-bold text-blue-600 mb-4"></h1>
+            <div class="flex justify-center space-x-2 mb-6">
+                <button id="btnGujarati" class="px-4 py-2 rounded-lg font-semibold transition-colors duration-200 gujarati-font">ગુજરાતી</button>
+                <button id="btnEnglish" class="px-4 py-2 rounded-lg font-semibold transition-colors duration-200">English</button>
+            </div>
+            <p id="pageSubtitle" class="text-lg text-gray-600"></p>
+        </header>
+
+        <main id="linksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </main>
+
+        <footer class="mt-12 text-center text-sm text-gray-500">
+            <p id="footerText"></p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Data for Links (Gujarati and English) ---
+        const resources = [
+            {
+                id: "adinath",
+                url: "https://mvshah027.github.io/tirthankar-adinath/",
+                gu: {
+                    title: "તીર્થંકર આદિનાથ બાળ પત્રિકા હબ",
+                    description: "પ્રથમ તીર્થંકર ભગવાન આદિનાથના જીવન અને ઉપદેશોને સમર્પિત બાળકો માટેની પત્રિકાઓ અને સંસાધનોનું કેન્દ્ર.",
+                    buttonText: "વધુ વાંચો"
+                },
+                en: {
+                    title: "Tirthankar Adinath Children's Magazine Hub",
+                    description: "A hub for children's magazines and resources dedicated to the life and teachings of the first Tirthankar, Lord Adinath.",
+                    buttonText: "Read More"
+                }
+            },
+            {
+                id: "mahaveer",
+                url: "https://mvshah027.github.io/tirthankar-mahaveer/",
+                gu: {
+                    title: "ભગવાન મહાવીર: કેવળજ્ઞાન અને શાસન સ્થાપના",
+                    description: "ભગવાન મહાવીરના કેવળજ્ઞાન પ્રાપ્તિ અને તેમના દ્વારા સ્થાપિત શાસનના સિદ્ધાંતોની વિસ્તૃત માહિતી. જિનવાણી: યુવા વિશેષાંકમાંથી પ્રેરણા.",
+                    buttonText: "વધુ જાણો"
+                },
+                en: {
+                    title: "Lord Mahavir: Omniscience and Establishment of Order",
+                    description: "Detailed information on Lord Mahavir's attainment of omniscience and the principles of the order established by him. Inspiration from Jinvaani: Youth Special Issue.",
+                    buttonText: "Learn More"
+                }
+            },
+            {
+                id: "karma",
+                url: "https://mvshah027.github.io/8-karma/",
+                gu: {
+                    title: "જૈન કર્મના સિદ્ધાંતો",
+                    description: "જૈન દર્શનમાં કર્મના આઠ પ્રકારો અને તેના બંધન તથા મોક્ષના માર્ગ પર તેના પ્રભાવની ઊંડાણપૂર્વક સમજ.",
+                    buttonText: "વિગતો જુઓ"
+                },
+                en: {
+                    title: "Principles of Jain Karma",
+                    description: "An in-depth understanding of the eight types of karma in Jain philosophy and their impact on bondage and the path to liberation.",
+                    buttonText: "View Details"
+                }
+            },
+            {
+                id: "tattva",
+                url: "https://mvshah027.github.io/9-tattva/",
+                gu: {
+                    title: "નવ તત્ત્વ માર્ગદર્શિકા",
+                    description: "જૈન ધર્મના નવ મૂળભૂત તત્ત્વો (નવ તત્ત્વ) પર એક વ્યાપક માર્ગદર્શિકા, જે વાસ્તવિકતાની પ્રકૃતિ અને મોક્ષનો માર્ગ સમજાવે છે.",
+                    buttonText: "માર્ગદર્શિકા વાંચો"
+                },
+                en: {
+                    title: "Nav Tattva Guide",
+                    description: "A comprehensive guide to the nine fundamental principles (Nav Tattva) of Jainism, explaining the nature of reality and the path to liberation.",
+                    buttonText: "Read Guide"
+                }
+            },
+            {
+                id: "parmeshthi",
+                url: "https://mvshah027.github.io/5-Parmeshthi/",
+                gu: {
+                    title: "પંચ પરમેષ્ઠિ જ્ઞાન સાગર",
+                    description: "જૈન ધર્મમાં પૂજનીય પાંચ પરમ આત્માઓ (પંચ પરમેષ્ઠિ) ના ગુણ અને મહત્વ પર જ્ઞાનનો ભંડાર.",
+                    buttonText: "જ્ઞાન મેળવો"
+                },
+                en: {
+                    title: "Panch Parmeshthi Knowledge Ocean",
+                    description: "A treasure trove of knowledge on the virtues and significance of the five supreme adorable souls (Panch Parmeshthi) in Jainism.",
+                    buttonText: "Gain Knowledge"
+                }
+            },
+            {
+                id: "vivek",
+                url: "https://mvshah027.github.io/vivek/", // UPDATED URL
+                gu: {
+                    title: "વિવેક: સાચો માર્ગ",
+                    description: "જીવનના દરેક પગલે યોગ્ય નિર્ણય લેવા માટે માર્ગદર્શન.",
+                    buttonText: "માર્ગદર્શન મેળવો"
+                },
+                en: {
+                    title: "Vivek: The Right Path",
+                    description: "Guidance for making the right decisions at every step of life.",
+                    buttonText: "Get Guidance"
+                }
+            }
+        ];
+
+        // --- Page Content in Different Languages ---
+        const pageContent = {
+            gu: {
+                pageTitle: "જૈન જ્ઞાન સાગર",
+                pageSubtitle: "જૈન ધર્મના સિદ્ધાંતો અને તીર્થંકરો વિશે જાણકારી આપતી વેબસાઇટ્સનું સંકલન.",
+                footerText: "© " + new Date().getFullYear() + " જૈન જ્ઞાન સંસાધનો. સર્વાધિકાર સુરક્ષિત."
+            },
+            en: {
+                pageTitle: "Jain Knowledge Hub",
+                pageSubtitle: "A curated collection of websites providing insights into Jain principles and Tirthankars.",
+                footerText: "© " + new Date().getFullYear() + " Jain Knowledge Resources. All rights reserved."
+            }
+        };
+
+        // --- DOM Elements ---
+        const pageTitleEl = document.getElementById('pageTitle');
+        const pageSubtitleEl = document.getElementById('pageSubtitle');
+        const linksContainerEl = document.getElementById('linksContainer');
+        const btnGujarati = document.getElementById('btnGujarati');
+        const btnEnglish = document.getElementById('btnEnglish');
+        const footerTextEl = document.getElementById('footerText');
+
+        let currentLanguage = 'gu'; // Default language
+
+        // --- Function to Render Links ---
+        function renderLinks(lang) {
+            linksContainerEl.innerHTML = ''; // Clear existing links
+            resources.forEach(resource => {
+                const langData = resource[lang];
+                const card = `
+                    <div class="bg-white shadow-lg rounded-xl p-6 hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold mb-2 ${lang === 'gu' ? 'gujarati-font text-blue-700' : 'text-blue-600'}">${langData.title}</h2>
+                            <p class="text-gray-600 mb-4 text-sm ${lang === 'gu' ? 'gujarati-font' : ''} leading-relaxed">${langData.description}</p>
+                        </div>
+                        <a href="${resource.url}" target="_blank" rel="noopener noreferrer"
+                           class="inline-block mt-auto bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg text-center transition-colors duration-200 ${lang === 'gu' ? 'gujarati-font' : ''}">
+                            ${langData.buttonText}
+                        </a>
+                    </div>
+                `;
+                linksContainerEl.insertAdjacentHTML('beforeend', card);
+            });
+        }
+
+        // --- Function to Update Page Content ---
+        function updatePageContent(lang) {
+            // Update page title and subtitle
+            pageTitleEl.textContent = pageContent[lang].pageTitle;
+            pageTitleEl.className = `text-3xl sm:text-4xl font-bold mb-4 ${lang === 'gu' ? 'gujarati-font text-blue-700' : 'text-blue-600'}`;
+            pageSubtitleEl.textContent = pageContent[lang].pageSubtitle;
+            pageSubtitleEl.className = `text-lg ${lang === 'gu' ? 'gujarati-font text-gray-700' : 'text-gray-600'}`;
+
+            // Update footer text
+            footerTextEl.textContent = pageContent[lang].footerText;
+            footerTextEl.className = `mt-12 text-center text-sm ${lang === 'gu' ? 'gujarati-font text-gray-600' : 'text-gray-500'}`;
+
+
+            // Update language button styles
+            if (lang === 'gu') {
+                btnGujarati.classList.add('active-lang');
+                btnGujarati.classList.remove('inactive-lang');
+                btnEnglish.classList.add('inactive-lang');
+                btnEnglish.classList.remove('active-lang');
+                document.documentElement.lang = 'gu';
+            } else {
+                btnEnglish.classList.add('active-lang');
+                btnEnglish.classList.remove('inactive-lang');
+                btnGujarati.classList.add('inactive-lang');
+                btnGujarati.classList.remove('active-lang');
+                document.documentElement.lang = 'en';
+            }
+
+            // Render links for the selected language
+            renderLinks(lang);
+        }
+
+        // --- Event Listeners for Language Buttons ---
+        btnGujarati.addEventListener('click', () => {
+            if (currentLanguage !== 'gu') {
+                currentLanguage = 'gu';
+                updatePageContent(currentLanguage);
+                localStorage.setItem('preferredLanguage', currentLanguage); // Save preference
+            }
+        });
+
+        btnEnglish.addEventListener('click', () => {
+            if (currentLanguage !== 'en') {
+                currentLanguage = 'en';
+                updatePageContent(currentLanguage);
+                localStorage.setItem('preferredLanguage', currentLanguage); // Save preference
+            }
+        });
+
+        // --- Initial Page Load ---
+        // Try to get language from localStorage or default to 'gu'
+        const savedLanguage = localStorage.getItem('preferredLanguage');
+        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'gu')) {
+            currentLanguage = savedLanguage;
+        }
+        updatePageContent(currentLanguage);
+
+    </script>
+</body>
+</html>
